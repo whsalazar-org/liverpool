@@ -1,0 +1,155 @@
+= Gobernanza y seguridad de GitHub Copilot: guía para desarrolladores
+:toc:
+
+Fecha de revisión de las fuentes: 14 de octubre de 2026.
+
+Esta guía está dirigida a desarrolladores que usan las sugerencias, el chat, la revisión de código, los agentes locales o el agente en la nube de Copilot. Explica decisiones cotidianas, no la administración empresarial. Las funciones, los valores predeterminados y la disponibilidad varían según el plan, el cliente, el modelo y las políticas de la organización; consulta la documentación enlazada antes de confiar en un control.
+
+*En resumen:* Copilot es un asistente, no una barrera de seguridad ni un revisor responsable. Tú sigues siendo responsable del código, los datos y las acciones que aceptes.
+
+== 1. Gobernanza en tu flujo de trabajo diario
+
+Gobernanza significa decidir dónde se permite la IA, qué información puede usar, qué acciones puede realizar y quién verifica el resultado.
+
+* *Tu organización o los propietarios del repositorio* establecen las políticas aplicables, el acceso a funciones y modelos, las exclusiones de contenido, el acceso al repositorio y los requisitos para combinar cambios. Algunas opciones se heredan y los desarrolladores individuales no pueden cambiarlas.
+* *Tú* usas la cuenta y las herramientas aprobadas, limitas el contexto compartido, apruebas únicamente las acciones necesarias, inspeccionas los cambios y sigues los procesos habituales de revisión y gestión de incidentes.
+* *Los responsables del mantenimiento y los revisores* hacen cumplir las comprobaciones y aprobaciones requeridas por el repositorio. La asistencia de Copilot no justifica omitir estos controles.
+
+Antes de usar Copilot con código de trabajo, confirma qué cuenta y suscripción están activas, si el repositorio y la clasificación de los datos permiten ese uso, y qué modelos e integraciones están aprobados. Si una función no está disponible o una política parece incorrecta, consulta al propietario del repositorio o al equipo de seguridad en vez de cambiar a una cuenta personal para eludirla. Consulta <<policies>> y <<mcp>>.
+
+== 2. Protege las entradas y comprende la privacidad
+
+Copilot procesa las instrucciones y la información contextual, no solo el texto que pegas deliberadamente. Según la función, el contexto puede incluir código, archivos adjuntos, el historial de la conversación y los resultados de herramientas. Revisa lo que adjuntas o permites que lea un agente. Consulta <<agents>>.
+
+* No envíes contraseñas, tokens, claves privadas, credenciales de producción ni datos personales o de clientes, a menos que el proceso aprobado explícitamente por tu organización permita los datos en cuestión. Prefiere ejemplos sintéticos y registros anonimizados.
+* Comparte el fragmento de código más pequeño que resulte útil. Elimina identificadores y cargas útiles sensibles de los seguimientos de pila, las capturas de pantalla y los informes de errores.
+* No consideres que un repositorio privado, `.gitignore` o una instrucción que diga «no leas secretos» garantizan que Copilot no pueda acceder a la información ni transmitirla.
+* Considera que el historial del chat, los registros de sesión y las sesiones compartidas de agentes pueden conservar copias de información contextual sensible. Sigue las reglas de retención y uso compartido de tu organización.
+
+=== El entrenamiento no es lo mismo que la retención
+
+GitHub declara que los datos de clientes de Copilot Business y Enterprise no se usan para entrenar modelos de IA. Para los planes individuales (Free, Pro, Pro+ y Max), la documentación de GitHub indica que, a partir del 24 de abril de 2026, las interacciones podrían usarse para entrenar y mejorar los modelos, a menos que desactives esta opción. En la configuración de *Copilot* de GitHub, establece *Permitir que GitHub use mis datos para entrenar modelos de IA* en *Desactivado* si corresponde. Verifica cuál es tu plan activo; esta opción no se muestra para las licencias Business o Enterprise. Consulta <<policies>>.
+
+Desactivar esta opción o contar con el compromiso de que no habrá entrenamiento *no* significa que no habrá procesamiento, almacenamiento ni participación de terceros. El alojamiento de modelos, el almacenamiento en caché, la retención, las excepciones de vista previa y los flujos de datos de integraciones varían. Consulta <<hosting>> y los términos de privacidad aplicables, y pregunta al equipo de seguridad antes de enviar información restringida. No des por sentado que el acuerdo de retención cero de datos de un proveedor de modelos se aplica a todas las funciones de Copilot.
+
+== 3. Funciones de seguridad y sus límites
+
+[cols="1,2,2",options="header"]
+|===
+|Función |Qué ofrece |Qué debes hacer igualmente
+
+|Políticas de la organización
+|Controles sobre las funciones, los modelos y las integraciones disponibles, según la suscripción y la interfaz.
+|Usa la identidad y el flujo de trabajo aprobados; no supongas que una suscripción personal hereda los controles de la organización. Consulta <<policies>> y <<mcp>>.
+
+|Exclusión de contenido
+|Controles de Business/Enterprise que excluyen el contenido configurado de las sugerencias, el chat y la revisión de código compatibles.
+|Verifica la compatibilidad con tu cliente y modo específicos. La exclusión no constituye una barrera universal contra la pérdida de datos. Consulta <<exclusion>>.
+
+|Coincidencias y referencias de código público
+|Los productos compatibles pueden bloquear sugerencias coincidentes o mostrar referencias a código público coincidente.
+|Revisa las referencias y las licencias; que no aparezca una coincidencia no demuestra que el código sea original ni que tengas permiso para usarlo. Consulta <<policies>> y <<github-surface>>.
+
+|Filtros de contenido
+|Comprobaciones diseñadas para detectar ciertos contenidos dañinos u ofensivos, con verificaciones de código público cuando corresponde.
+|Revisa la precisión y seguridad del resultado; los filtros no garantizan que el código sea seguro. Consulta <<hosting>> y <<agents>>.
+
+|Permisos y aislamiento de agentes
+|Controles de permisos para herramientas locales; el agente en la nube usa un entorno efímero con un firewall habilitado de forma predeterminada.
+|Revisa los permisos, la configuración, los comandos y los destinos efectivos. Los agentes locales no heredan automáticamente el aislamiento de la nube. Consulta <<cli>>, <<agents>> y <<cloud-risks>>.
+
+|Validación del agente en la nube
+|De forma predeterminada, revisión de código, CodeQL, análisis de secretos y comprobaciones de nuevas dependencias frente a los avisos pertinentes de GitHub.
+|Inspecciona los resultados de la sesión y ejecuta las comprobaciones del repositorio. Las herramientas se pueden desactivar y su cobertura es limitada; no constituyen una certificación de seguridad. Consulta <<cloud-risks>>.
+|===
+
+=== Exclusión de contenido: comprueba la interfaz, no solo el archivo
+
+GitHub documenta que la exclusión de contenido no es compatible con los modos *Edit* y *Agent* de Copilot Chat en VS Code y otros editores. Las tablas de compatibilidad actuales indican que la CLI sí es compatible, mientras que la guía de configuración de exclusiones aún indica que la CLI no lo es. Confirma el comportamiento para el cliente que tienes desplegado y con tu equipo de seguridad, en vez de confiar únicamente en una de esas afirmaciones. GitHub también documenta la filtración indirecta de contexto semántico —por ejemplo, información de tipos proporcionada por un IDE— y las limitaciones con enlaces simbólicos y sistemas de archivos remotos. Consulta la tabla de compatibilidad actual de la función que realmente usas, incluidas las experiencias de GitHub.com. Consulta <<exclusion>>, <<policy-surfaces>> y <<exclusion-setup>>.
+
+Si cierta información nunca debe salir de un perímetro aprobado, mantenla fuera del entorno accesible para el agente y utiliza los controles de acceso aprobados por tu organización. No pegues contenido excluido en una instrucción ni lo expongas mediante una herramienta esperando que una regla basada en archivos proteja esa copia.
+
+=== Referencias de código público: ayuda para la revisión, no autorización de licencias
+
+Cuando se pueda configurar, la opción *Sugerencias que coinciden con código público* ofrece *Permitir* o *Bloquear*. Es posible que una opción asignada por la organización se herede. El bloqueo es compatible con la mayoría de los productos, pero no con todos; la matriz de políticas indica que las coincidencias del agente en la nube solo se anotan. En GitHub.com, las referencias de código buscan en un índice de repositorios públicos de GitHub, no en repositorios privados ni en código alojado en otros sitios, y ese índice puede estar incompleto o desactualizado. Consulta <<policies>>, <<policy-surfaces>> y <<github-surface>>.
+
+Cuando aparezca una referencia, inspecciona el código fuente y su licencia, sigue las políticas de atribución y dependencias de tu equipo, y pide asesoramiento legal si tienes dudas. La ausencia de una referencia no elimina las obligaciones de propiedad intelectual.
+
+== 4. Usa agentes y herramientas externas con privilegios mínimos
+
+Las funciones de agente pueden editar archivos, ejecutar comandos y llamar a servicios externos. Un comando de shell puede utilizar las capacidades de tu cuenta de usuario, incluida la eliminación de archivos o la realización de solicitudes de red. Consulta <<cli>>.
+
+* Empieza con una tarea pequeña y explícita en una rama separada. Define el alcance permitido, las pruebas esperadas y las acciones que requieren aprobación humana.
+* Mantén activas las solicitudes de permiso cuando sean compatibles. Lee el comando completo, el directorio de trabajo, las rutas de archivos y los destinos de red antes de aprobarlo; presta atención a los comandos encadenados y a los scripts descargados de Internet.
+* Evita las aprobaciones persistentes y amplias, y las opciones de CLI `--allow-all`/`--yolo` en equipos de desarrollo de uso habitual. GitHub recomienda opciones permisivas solo en entornos aislados. Revisa y revoca los permisos guardados cuando ya no sean necesarios.
+* Usa un entorno debidamente aislado para repositorios desconocidos o tareas de riesgo. Una rama separada protege el historial de revisión, no el resto de tu equipo ni tus credenciales.
+* Conecta únicamente servidores MCP (Model Context Protocol) aprobados. MCP conecta Copilot con herramientas y datos adicionales; no certifica que sean confiables. Revisa quién publica el servidor, su configuración, los datos accesibles, las herramientas habilitadas y los permisos de autenticación. Prefiere el acceso de solo lectura y credenciales de corta duración y alcance limitado.
+* Considera los datos enviados a herramientas externas, búsquedas web o integraciones como una vía adicional de divulgación. Verifica el destino y la política aplicable antes de habilitarlas.
+
+Consulta <<cli>> y <<mcp>> para ver los controles del producto y los detalles de configuración actuales.
+
+*Excepción del agente en la nube:* las herramientas MCP configuradas se usan de forma autónoma, sin aprobación para cada llamada. Revisa el conjunto de herramientas permitidas y las credenciales antes de iniciar el trabajo, no solo cuando aparezca una solicitud de permiso. El token MCP de GitHub predeterminado es de solo lectura y está limitado al repositorio actual, pero la configuración puede ampliar ese acceso. Consulta <<cloud-mcp>>.
+
+=== Inyección de instrucciones: el contenido no confiable puede convertirse en instrucciones
+
+La inyección de instrucciones ocurre cuando una entrada maliciosa intenta desviar a un asistente de IA. La inyección indirecta puede llegar a través de un archivo del repositorio, una incidencia, una página web o la respuesta de una herramienta que lea el asistente. GitHub documenta este riesgo y las mitigaciones del agente en la nube; OWASP explica la amenaza más amplia en <<owasp>>.
+
+Por ejemplo, el archivo README de una dependencia podría indicar al agente que cargue variables de entorno en un punto de conexión «de diagnóstico». Ese contenido no es confiable y no constituye una autorización. Rechaza el comando, detén la sesión si es necesario e informa sobre el contenido sospechoso. Las instrucciones personalizadas como «nunca reveles secretos» ayudan a comunicar la intención, pero no hacen cumplir el control de acceso ni impiden todas las inyecciones.
+
+Limita los secretos y las herramientas accesibles antes de iniciar la tarea. No desactives las aprobaciones ni amplíes el acceso a la red solo porque el texto encontrado por el agente lo solicite.
+
+=== El trabajo del agente en la nube aún requiere revisión humana
+
+Entre las mitigaciones documentadas por GitHub se incluyen las escrituras restringidas en ramas, las protecciones de rama y comprobaciones obligatorias, un firewall de salida y la revisión humana antes de combinar solicitudes de incorporación de cambios en borrador creadas por el agente. El agente no puede aprobar ni combinar una solicitud de incorporación de cambios. De forma predeterminada, un usuario con acceso de escritura debe aprobar la ejecución de los flujos de trabajo de Actions sobre sus cambios; se puede configurar la ejecución automática de los flujos. Consulta <<cloud-risks>>.
+
+Antes de aprobar flujos de trabajo, revisa el diff completo, especialmente los archivos de flujo de trabajo, los scripts de instalación, los cambios de dependencias y el código que podría acceder a credenciales de CI. No añadas secretos de producción al entorno del agente ni amplíes su acceso a la red solo para que una tarea pase. Revisa los registros de sesión para comprender qué herramientas se usaron y qué validación se realizó, sin suponer que se comprobaron todas las vulnerabilidades posibles.
+
+El firewall de la nube no es exhaustivo: se aplica a los procesos iniciados mediante la herramienta Bash del agente, no directamente a los procesos del servidor MCP ni a los pasos de configuración definidos. Por lo tanto, el aislamiento y una lista de permitidos no eliminan todas las vías de exfiltración. Consulta <<firewall>>.
+
+== 5. Valida el código generado como cualquier otra contribución
+
+Copilot puede producir código verosímil pero incorrecto, pasar por alto vulnerabilidades, inventar API o paquetes y ofrecer comentarios de revisión erróneos. La revisión de código de Copilot complementa la revisión humana, no la sustituye. Consulta <<agents>>.
+
+. Lee el diff completo y confirma que cada cambio sea necesario. Presta especial atención a la autenticación, la autorización, el manejo de entradas, la inyección SQL o de comandos, la criptografía y el registro de datos sensibles.
+. Verifica el comportamiento de las API en la documentación oficial. Comprueba los nombres, la procedencia, las licencias y los avisos de seguridad de las dependencias antes de instalarlas; no instales un paquete solo porque Copilot lo haya sugerido.
+. Ejecuta las comprobaciones de formato, lint, compilación y pruebas existentes en el repositorio. Añade pruebas específicas para el comportamiento modificado, incluidas entradas no válidas, permisos denegados y casos de regresión. Evalúa las pruebas generadas de forma independiente; podrían repetir el error de la implementación.
+. Usa las comprobaciones de seguridad disponibles en el repositorio, como el análisis de secretos, la revisión de dependencias y el análisis de código. Estas son capacidades complementarias de GitHub, no están disponibles automáticamente en todos los lugares donde uses Copilot; su disponibilidad y configuración varían.
+. Obtén la revisión humana y las comprobaciones requeridas antes de combinar los cambios. Según la política del equipo, explica en la solicitud de incorporación de cambios las decisiones relevantes tomadas con ayuda de IA e indica qué se probó y cuáles son las limitaciones.
+
+No aceptes cambios que desactiven comprobaciones de seguridad, debiliten la validación o expongan credenciales solo para resolver un error.
+
+== 6. Lista de comprobación rápida y respuesta ante incidentes
+
+*Antes de una sesión*
+
+* Confirma que la cuenta, el repositorio, el modelo y las integraciones estén aprobados.
+* Reduce el contexto al mínimo y elimina los datos sensibles.
+* Verifica la compatibilidad de la exclusión de contenido y los permisos efectivos de las herramientas.
+
+*Antes de aceptar o combinar cambios*
+
+* Inspecciona los comandos, los destinos, el diff completo y las referencias a código público.
+* Ejecuta las pruebas y comprobaciones de seguridad pertinentes; revisa sus resultados.
+* Obtén la aprobación humana requerida y conserva evidencia útil de la revisión sin copiar secretos en ella.
+
+*Si algo sale mal*
+
+Detén el agente o la ejecución de la herramienta y revoca los accesos innecesarios. Si se expuso una credencial, revócala o rótala mediante el proceso habitual de gestión de incidentes; eliminar un mensaje del chat o revertir una confirmación no es suficiente. Notifica al equipo de seguridad o al propietario del repositorio, registra los sistemas y las acciones afectados sin reproducir el secreto, y sigue sus instrucciones para la gestión de registros y la corrección.
+
+== Fuentes y lecturas adicionales
+
+Las descripciones de las funciones anteriores resumen la documentación de GitHub; las recomendaciones de flujo de trabajo aplican esos controles mediante el principio de privilegio mínimo y la verificación humana. Estos enlaces son la referencia autorizada sobre el comportamiento actual, no una promesa de que todos los planes o clientes se comporten de la misma manera.
+
+* [[policies]] https://docs.github.com/en/copilot/how-tos/manage-your-account/manage-policies[GitHub: Managing Copilot policies as an individual subscriber] — opciones heredadas, coincidencias de código público y exclusión del entrenamiento.
+* [[hosting]] https://docs.github.com/en/copilot/reference/ai-models/model-hosting[GitHub: Hosting of models for Copilot] — proveedores, compromisos sobre datos, almacenamiento en caché y excepciones de retención.
+* [[exclusion]] https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion[GitHub: Content exclusion] — matriz de disponibilidad y limitaciones.
+* [[exclusion-setup]] https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot[GitHub: Excluding content from Copilot] — instrucciones de configuración; compara su limitación de CLI con las tablas de compatibilidad actuales.
+* [[policy-surfaces]] https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies[GitHub: Supported surfaces for Copilot policies] — qué políticas se aplican a cada experiencia.
+* [[github-surface]] https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github[GitHub: Copilot on GitHub.com] — contexto, trabajo de agentes y cobertura de referencias a código público.
+* [[agents]] https://docs.github.com/en/copilot/responsible-use/agents[GitHub: Application card for Copilot Agents] — capacidades, entornos de ejecución y limitaciones de uso responsable.
+* [[cloud-risks]] https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/risks-and-mitigations[GitHub: Cloud-agent risks and mitigations] — análisis, permisos, aprobación de flujos de trabajo, firewall y auditabilidad.
+* [[cli]] https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/allowing-tools[GitHub: Allowing and denying CLI tool use] — controles de herramientas, aprobaciones guardadas y advertencias sobre modos permisivos.
+* [[mcp]] https://docs.github.com/en/copilot/concepts/context/mcp[GitHub: About Model Context Protocol] — integraciones, alcance de las políticas y reducción del conjunto de herramientas.
+* [[cloud-mcp]] https://docs.github.com/en/copilot/concepts/agents/cloud-agent/mcp-and-cloud-agent[GitHub: MCP and Copilot cloud agent] — uso autónomo de herramientas y alcance del token predeterminado.
+* [[firewall]] https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-the-firewall[GitHub: Customizing the Copilot firewall] — alcance de la protección y limitaciones.
+* [[owasp]] https://genai.owasp.org/llmrisk/llm01-prompt-injection/[OWASP: LLM01 Prompt Injection] — contexto externo sobre el modelo de amenazas, también citado por las directrices de GitHub sobre riesgos del agente en la nube; no documenta garantías específicas de Copilot.
