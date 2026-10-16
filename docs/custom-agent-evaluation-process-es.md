@@ -10,7 +10,7 @@ buen rendimiento pueda compensar.
 Documente el propósito del agente, los repositorios compatibles, las herramientas
 permitidas, los requisitos de aprobación y los entregables esperados.
 
-Para `test-specialist`, el éxito implica pruebas significativas, resultados
+Para el agent `test-specialist`, el éxito implica pruebas significativas, resultados
 reproducibles, ninguna debilitación de las aserciones y ningún cambio no autorizado
 en el código de producción.
 
