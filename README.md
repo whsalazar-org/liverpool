@@ -48,6 +48,42 @@ Dialog and scrolling APIs are shimmed for jsdom. Native dialog behavior, focus
 trapping, visual layout, wishlist interactions, and the sign-in panel are not
 covered by this suite.
 
+## Continuous integration
+
+The [CI workflow](.github/workflows/ci.yml) runs on pull requests, pushes, merge
+queues, manual requests, and a weekly schedule using Node.js 24. It provides two
+checks:
+
+- **Tests and build**: installs locked dependencies with `npm ci`, runs all tests,
+  and builds the application.
+- **Dependency security**: audits production and development dependencies from
+  the lockfile using `npm audit --audit-level=high`. High or critical advisories,
+  or an audit service error, fail the check. Lower-severity advisories are
+  reported but do not fail it. This job does not install packages or execute
+  dependency lifecycle scripts.
+
+### Require checks before merging
+
+A workflow alone does not prevent merging. After pushing it and completing an
+initial run:
+
+1. Open the repository's **Settings > Rules > Rulesets** and create or update an
+   active branch ruleset for the default branch and other protected branches.
+2. Require pull requests and enable **Require status checks to pass**.
+3. Select **Tests and build** and **Dependency security** from GitHub Actions.
+4. Require branches to be up to date, or use a merge queue. Remove bypass access
+   where your governance policy requires these checks for everyone.
+
+If rulesets are unavailable, configure equivalent branch-protection rules.
+Repository administrators must configure enforcement; committing this workflow
+does not enable it automatically.
+
+Dependency auditing detects known advisories, not all vulnerabilities. It does
+not provide source-code analysis, secret scanning, or invoke custom Copilot
+agents. Configure those separately as needed. Actions use major-version tags;
+pin reviewed full commit SHAs if your supply-chain policy requires immutable
+action references.
+
 ## Project documentation
 
 [GitHub Copilot governance and security: a developer's guide](docs/copilot-governance-security.adoc)
