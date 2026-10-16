@@ -1,7 +1,8 @@
+
 ---
 name: build-web
 description: Build a responsive Liverpool retail shopping demo homepage with React.
-agent: frontend-specialist 
+mode: agent
 ---
 
 # Build a Liverpool Retail Shopping Demo
