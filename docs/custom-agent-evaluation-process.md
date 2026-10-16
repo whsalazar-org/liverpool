@@ -9,7 +9,7 @@ score that strong performance can offset.
 Record the agent's purpose, supported repositories, permitted tools, approval
 requirements, and expected deliverables.
 
-For `test-specialist`, success means meaningful tests, reproducible results, no
+For the `test-specialist` agent, success means meaningful tests, reproducible results, no
 weakened assertions, and no unauthorized production changes.
 
 ## 2. Build a Benchmark Suite
