@@ -1,33 +1,32 @@
+---
+name: build-web
+description: Build a responsive Liverpool retail shopping demo homepage with React.
+agent: frontend-specialist 
+---
+
 # Build a Liverpool Retail Shopping Demo
 
-Use the `react-simple-webapp` skill at `.github/skills/react-simple-webapp/SKILL.md` and work as the `frontend-specialist` agent defined in `.github/agents/frontend-specialist.agent.md`.
+In the current repository, build a polished, responsive shopping homepage for a fictional Liverpool retail demo.
 
-## Goal
+## Before making changes
 
-Build a polished, responsive demo website for a fictional Liverpool retail shopping experience. The store offers clothing, cosmetics, furniture, electronics, housewares, and appliances.
+1. Read the repository instructions.
+2. Read `.github/skills/react-simple-webapp/SKILL.md` and `.github/agents/frontend-specialist.agent.md` if they are available, and follow their guidance.
+3. Inspect the existing app structure, styles, scripts, and tests. Work within the project's existing patterns.
 
-Make it clear that this is a demo. Use mock content only; do not add real authentication, payment processing, or sensitive data collection.
-
-## Before You Code
-
-Inspect the existing app structure, styles, and available scripts. Follow the repository’s instructions and existing project patterns.
-
-## Website Requirements
-
-- Create a clean, accessible shopping homepage.
-- Include a header with the company name, simple navigation, and a prominent sign-in button. Sign-in must be a demo-only interaction, not real authentication.
-- Add a welcoming hero section with a clear primary call to action.
-- Show service or product category cards, including clothing, cosmetics, and furniture.
-- Include a shopping cart and wishlist populated with clearly fictional sample products.
-- Make the layout responsive and provide working, keyboard-accessible interactions where appropriate.
-
-## Implementation Guidelines
+## Requirements
 
 - Use React and JavaScript.
+- Create an accessible retail shopping homepage for clothing, cosmetics, furniture, electronics, housewares, and appliances.
+- Include a header with the company name, simple navigation, and a prominent sign-in button.
+- Add a welcoming hero section with a clear primary call to action.
+- Show product category cards, including clothing, cosmetics, and furniture.
+- Include a shopping cart and wishlist with clearly fictional sample products.
+- Implement responsive styling and keyboard-accessible interactions where appropriate.
+- Make it clear that this is a demo. Use mock content only. Do not implement real authentication, payment processing, or sensitive data collection.
 - Keep components focused and minimize dependencies.
-- Follow the project’s existing conventions and patterns.
-- Add or update tests if test infrastructure exists.
+- Add or update tests if the repository has test infrastructure.
 
-## Verification and Report
+## Verify and report
 
-Run the available checks. In your final response, report the files changed and the results of those checks.
+Run the relevant checks available in the repository. Summarize the changes, list the files you changed, and report the check results.
