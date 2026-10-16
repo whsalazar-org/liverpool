@@ -30,7 +30,23 @@ npm run preview
   available; local serif and sans-serif fallbacks work offline.
 
 Bag and wishlist state live only in memory and reset on page reload. No data is
-sent to a store backend. There is no existing automated test framework.
+sent to a store backend.
+
+## Tests
+
+```sh
+npm test
+npm run test:watch
+```
+
+Vitest and React Testing Library cover product rendering and prices, category
+and search filtering, empty-results recovery, department navigation, and bag
+additions, quantity changes, removal, and subtotals. Tests run locally in jsdom
+without network requests or credentials.
+
+Dialog and scrolling APIs are shimmed for jsdom. Native dialog behavior, focus
+trapping, visual layout, wishlist interactions, and the sign-in panel are not
+covered by this suite.
 
 ## Project documentation
 

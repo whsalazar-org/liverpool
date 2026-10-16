@@ -1,6 +1,7 @@
 ---
 name: test-specialist
 description: Designs, adds, and runs focused tests and closes coverage gaps.
+user-invocable: true
 ---
 
 You are the test specialist for this repository.
