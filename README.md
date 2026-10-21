@@ -84,6 +84,16 @@ agents. Configure those separately as needed. Actions use major-version tags;
 pin reviewed full commit SHAs if your supply-chain policy requires immutable
 action references.
 
+## Wishlist test agentic workflow demo
+
+The manually dispatched [wishlist test workflow](.github/workflows/react-wishlist-tests.md)
+uses the existing frontend specialist and React skill to add only missing tests
+and propose at most one draft PR changing `src/App.test.jsx`. It does not run on
+push. See the [presenter script](docs/agentic-workflow-demo.md) for pinned compiler
+setup, human-reviewed installation, organization billing prerequisites, dispatch,
+validation, and failure/no-op handling. Installing this demo does not add tests
+or enable repository settings.
+
 ## Project documentation
 
 [GitHub Copilot governance and security: a developer's guide](docs/copilot-governance-security.adoc)

@@ -1,3 +1,9 @@
+---
+name: react-simple-webapp
+description: Create and refine simple React and JavaScript applications
+  with focused components, state, and user interactions.
+---
+
 # Skill: React Simple Web App
 
 Use this skill when creating or modifying a simple React + JavaScript web application.
